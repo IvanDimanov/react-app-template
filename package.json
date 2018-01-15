@@ -1,0 +1,63 @@
+{
+  "name": "react-app-template",
+  "version": "0.0.1",
+  "description": "Deployment ready setup with pure React",
+  "readme": "Readme.md",
+  "license": "MIT",
+  "authors": [
+    "Ivan Dimanov <react-app-template@idimanov.com>"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IvanDimanov/react-app-template.git"
+  },
+  "scripts": {
+    "lint": "standard",
+    "prebuild": "rimraf ./build",
+    "build": "webpack --config webpack/webpack.config.production.js",
+    "local-development": "webpack-dashboard -- webpack-dev-server --config webpack/webpack.config.development.js",
+    "prepush": "npm run lint"
+  },
+  "engines": {
+    "node": ">=8"
+  },
+  "standard": {
+    "parser": "babel-eslint",
+    "ignore": [
+      "notes",
+      "build"
+    ]
+  },
+  "dependencies": {
+    "material-ui": "1.0.0-beta.28",
+    "material-ui-icons": "1.0.0-beta.17",
+    "react": "16.2.0",
+    "react-dom": "16.2.0",
+    "react-router": "4.2.0",
+    "react-router-dom": "4.2.2"
+  },
+  "devDependencies": {
+    "babel-core": "6.26.0",
+    "babel-eslint": "8.2.1",
+    "babel-loader": "7.1.2",
+    "babel-plugin-syntax-dynamic-import": "6.18.0",
+    "babel-plugin-transform-class-properties": "6.24.1",
+    "babel-plugin-transform-es3-member-expression-literals": "6.22.0",
+    "babel-plugin-transform-es3-property-literals": "6.22.0",
+    "babel-plugin-transform-strict-mode": "6.24.1",
+    "babel-preset-env": "1.6.1",
+    "babel-preset-es2015": "6.24.1",
+    "babel-preset-react": "6.24.1",
+    "babel-preset-stage-0": "6.24.1",
+    "eslint": "4.15.0",
+    "html-webpack-plugin": "2.30.1",
+    "husky": "0.14.3",
+    "rimraf": "2.6.2",
+    "standard": "10.0.3",
+    "uglifyjs-webpack-plugin": "1.1.6",
+    "webpack": "3.10.0",
+    "webpack-dashboard": "1.0.2",
+    "webpack-dev-server": "2.11.0",
+    "webpack-merge": "4.1.1"
+  }
+}

@@ -1,0 +1,4 @@
+{
+  "plugins": ["transform-strict-mode", "transform-class-properties", "syntax-dynamic-import"],
+  "presets" : ["es2015", "react"]
+}
