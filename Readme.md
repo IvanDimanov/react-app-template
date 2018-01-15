@@ -1,5 +1,5 @@
 # React App template
-Deployment ready setup with pure React
+Production ready setup for pure React
 
 ## Setup
 ```

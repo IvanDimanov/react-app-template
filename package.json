@@ -1,7 +1,7 @@
 {
   "name": "react-app-template",
   "version": "0.0.1",
-  "description": "Deployment ready setup with pure React",
+  "description": "Production ready setup for pure React",
   "readme": "Readme.md",
   "license": "MIT",
   "authors": [
