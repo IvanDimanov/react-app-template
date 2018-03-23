@@ -54,7 +54,7 @@
     "husky": "0.14.3",
     "rimraf": "2.6.2",
     "standard": "10.0.3",
-    "uglifyjs-webpack-plugin": "1.1.6",
+    "uglifyjs-webpack-plugin": "1.2.4",
     "webpack": "3.10.0",
     "webpack-dashboard": "1.0.2",
     "webpack-dev-server": "2.11.0",
