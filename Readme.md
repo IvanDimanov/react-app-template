@@ -1,6 +1,9 @@
 # React App template
 Production ready setup for pure React
 
+## [Live Demo](https://react-app-template.now.sh)
+## [![App](https://raw.githubusercontent.com/IvanDimanov/react-app-template/master/image.png)](https://react-app-template.now.sh)
+
 ## If you run ...
 ```
 git clone git@github.com:IvanDimanov/react-app-template.git

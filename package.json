@@ -16,6 +16,8 @@
     "prebuild": "rimraf ./build",
     "build": "webpack --config webpack/webpack.config.production.js",
     "local-development": "webpack-dashboard -- webpack-dev-server --config webpack/webpack.config.development.js",
+    "start": "serve ./build",
+    "deploy": "now && now alias",
     "prepush": "npm run lint"
   },
   "engines": {
@@ -28,13 +30,24 @@
       "build"
     ]
   },
+  "now": {
+    "files": [
+      "src",
+      "webpack",
+      ".babelrc",
+      ".env"
+    ],
+    "dotenv": true,
+    "alias": "react-app-template"
+  },
   "dependencies": {
     "material-ui": "1.0.0-beta.28",
     "material-ui-icons": "1.0.0-beta.17",
     "react": "16.2.0",
     "react-dom": "16.2.0",
     "react-router": "4.2.0",
-    "react-router-dom": "4.2.2"
+    "react-router-dom": "4.2.2",
+    "serve": "6.5.3"
   },
   "devDependencies": {
     "babel-core": "6.26.0",
