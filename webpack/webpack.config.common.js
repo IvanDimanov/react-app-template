@@ -22,6 +22,13 @@ module.exports = {
     ]
   },
 
+  resolve: {
+    modules: [
+      path.resolve(__dirname, '../node_modules'),
+      path.resolve(__dirname, '../src')
+    ]
+  },
+
   plugins: [
     new HTMLWebpackPlugin({
       template: './src/index.html',
