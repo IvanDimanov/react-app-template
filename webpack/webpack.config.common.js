@@ -24,7 +24,8 @@ module.exports = {
 
   plugins: [
     new HTMLWebpackPlugin({
-      template: './src/index.html'
+      template: './src/index.html',
+      favicon: 'src/images/favicon.ico'
     }),
 
     new webpack.optimize.CommonsChunkPlugin({
