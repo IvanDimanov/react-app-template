@@ -29,6 +29,9 @@ const envFile = fs.readFileSync(ENV_PATH, 'utf-8')
  */
 const env = envFile
   .split('\n')
+  .filter((line) => line)  // Removes empty lines
+  .filter((line) => !line.startsWith('//'))  // Removes "//" comments
+  .filter((line) => !line.startsWith('#'))   // Removes "#" comments
   .map((line) => {
     const data = line.split('=')
     const key = String(data[0]).trim()
