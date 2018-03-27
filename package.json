@@ -17,7 +17,8 @@
     "build": "webpack --config webpack/webpack.config.production.js",
     "local-development": "webpack-dashboard -- webpack-dev-server --config webpack/webpack.config.development.js",
     "start": "serve ./build",
-    "deploy": "now && now alias",
+    "deploy": "now",
+    "postdeploy": "now alias",
     "prepush": "npm run lint"
   },
   "engines": {
