@@ -6,15 +6,20 @@ import AsyncComponent from './utils/AsyncComponent'
 import AppTemplate from './AppTemplate'
 
 const Home = () => import(/* webpackChunkName: "Home" */ './Home')
-const Contacts = () => import(/* webpackChunkName: "Contacts" */ './Contacts')
-const Projects = () => import(/* webpackChunkName: "Projects" */ './Projects')
+const Avatar = () => import(/* webpackChunkName: "Avatar" */ './Avatar')
+
+const AsyncPropsRoute = (props) => (
+  <Route
+    {...props}
+    render={() => <AsyncComponent moduleProvider={props.moduleProvider} moduleProps={props.moduleProps} />}
+  />
+)
 
 render(
   <Router>
     <AppTemplate>
-      <Route exact path='/' component={() => <AsyncComponent moduleProvider={Home} />} />
-      <Route exact path='/contacts' component={() => <AsyncComponent moduleProvider={Contacts} />} />
-      <Route exact path='/projects' component={() => <AsyncComponent moduleProvider={Projects} />} />
+      <AsyncPropsRoute exact path='/' moduleProvider={Home} />
+      <AsyncPropsRoute exact path='/avatar' moduleProvider={Avatar} />
     </AppTemplate>
   </Router>,
   document.getElementById('app')

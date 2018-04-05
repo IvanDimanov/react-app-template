@@ -14,7 +14,9 @@ export default class AsyncComponent extends PureComponent {
   }
 
   render () {
+    const { moduleProps } = this.props
     const { Component } = this.state
-    return Component ? <Component /> : <CircularProgress />
+
+    return Component ? <Component {...moduleProps} /> : <CircularProgress />
   }
 }
