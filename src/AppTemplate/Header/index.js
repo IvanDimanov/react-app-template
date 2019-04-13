@@ -1,44 +1,43 @@
-import React, { Component } from 'react'
-import { withStyles } from 'material-ui/styles'
+import React, {useState, useContext} from 'react';
+import PropTypes from 'prop-types';
+import {withStyles} from '@material-ui/core/styles';
 
-import AppBar from 'material-ui/AppBar'
-import Toolbar from 'material-ui/Toolbar'
-import Typography from 'material-ui/Typography'
-import IconButton from 'material-ui/IconButton'
-import Avatar from 'material-ui/Avatar'
-import Menu, { MenuItem } from 'material-ui/Menu'
-import Divider from 'material-ui/Divider'
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import Avatar from '@material-ui/core/Avatar';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import Divider from '@material-ui/core/Divider';
 
-import LinkButton from './LinkButton'
+import {CommonContext} from 'AppTemplate/CommonContext';
+
+import LinkButton from './LinkButton';
 
 const styles = {
   flex: {
-    flex: 1
-  }
-}
+    flex: 1,
+  },
+};
 
-class Header extends Component {
-  state = {
-    anchorEl: null
-  }
+const Header = ({classes}) => {
+  const {avatar, setAvatar} = useContext(CommonContext);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const isMenuOpened = Boolean(anchorEl);
 
-  handleMenu = event => {
-    const { currentTarget } = event
-    this.setState((state) => ({ ...state, anchorEl: currentTarget }))
-  }
+  const openMenu = ({currentTarget}) => setAnchorEl(currentTarget);
+  const closeMenu = () => setAnchorEl(null);
 
-  handleClose = () => {
-    this.setState((state) => ({ ...state, anchorEl: null }))
-  }
+  const openUserProfile = () => window.open(avatar.html_url);
 
-  render () {
-    const { anchorEl } = this.state
-    const open = Boolean(anchorEl)
-    const { classes, avatar, setAvatar } = this.props
+  const logOut = () => {
+    setAnchorEl(null);
+    setAvatar(null);
+  };
 
-    return <AppBar
-      position='static'
-    >
+  return (
+    <AppBar position='static'>
       <Toolbar>
         <Typography className={classes.flex}>
           <LinkButton path='/' label='Home' />
@@ -48,10 +47,10 @@ class Header extends Component {
         {(avatar || {}).id && (
           <div>
             <IconButton
-              aria-owns={open ? 'menu-appbar' : null}
+              aria-owns={isMenuOpened ? 'menu-appbar' : null}
               aria-haspopup
               color='inherit'
-              onClick={this.handleMenu}
+              onClick={openMenu}
             >
               <Avatar
                 src={avatar.avatar_url}
@@ -65,27 +64,27 @@ class Header extends Component {
 
               anchorOrigin={{
                 vertical: 'top',
-                horizontal: 'right'
+                horizontal: 'right',
               }}
 
               transformOrigin={{
                 vertical: 'top',
-                horizontal: 'right'
+                horizontal: 'right',
               }}
 
-              open={open}
-              onClose={this.handleClose}
+              open={isMenuOpened}
+              onClose={closeMenu}
             >
-              <MenuItem onClick={() => window.open(avatar.html_url)}>
+              <MenuItem
+                title={avatar.html_url}
+                onClick={openUserProfile}
+              >
                 Profile
               </MenuItem>
 
               <Divider />
 
-              <MenuItem onClick={() => {
-                this.handleClose()
-                setAvatar()
-              }}>
+              <MenuItem onClick={logOut}>
                 Logout
               </MenuItem>
             </Menu>
@@ -93,7 +92,11 @@ class Header extends Component {
         )}
       </Toolbar>
     </AppBar>
-  }
-}
+  );
+};
 
-export default withStyles(styles)(Header)
+Header.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(Header);

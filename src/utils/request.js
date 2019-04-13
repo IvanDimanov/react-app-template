@@ -1,46 +1,46 @@
 /* global sessionStorage */
 
-import axios from 'axios'
+import axios from 'axios';
 
 /* Helps when User reload the page or come from a Login page */
-let AuthorizationHeader = sessionStorage.getItem('AuthorizationHeader') || ''
+let authorizationHeader = sessionStorage.getItem('authorizationHeader') || '';
 
 const request = async (args) => {
   if (typeof args === 'string') {
     args = {
-      url: args
-    }
+      url: args,
+    };
   }
 
-  args.method = args.method || 'GET'
+  args.method = args.method || 'GET';
 
   /* Check if we can start using User authorization for every request he makes */
-  if (AuthorizationHeader) {
+  if (authorizationHeader) {
     if (!args.headers ||
         typeof args.headers !== 'object'
     ) {
-      args.headers = {}
+      args.headers = {};
     }
 
-    args.headers.authorization = AuthorizationHeader
+    args.headers.authorization = authorizationHeader;
   }
 
-  const response = await axios(args)
+  const response = await axios(args);
 
-  const newAuthorizationHeader = response.headers.authorization || response.headers.Authorization
+  const newAuthorizationHeader = response.headers.authorization || response.headers.Authorization;
   if (newAuthorizationHeader) {
-    AuthorizationHeader = newAuthorizationHeader
-    sessionStorage.setItem('AuthorizationHeader', AuthorizationHeader)
+    authorizationHeader = newAuthorizationHeader;
+    sessionStorage.setItem('authorizationHeader', authorizationHeader);
   }
 
-  return response
-}
+  return response;
+};
 
 /* Short-hands */
-request.getAuthorizationHeader = () => AuthorizationHeader
-request.get = (url, args) => request(url, {...args, method: 'GET'})
-request.put = (url, args) => request(url, {...args, method: 'PUT'})
-request.post = (url, args) => request(url, {...args, method: 'POST'})
-request.delete = (url, args) => request(url, {...args, method: 'DELETE'})
+request.getAuthorizationHeader = () => authorizationHeader;
+request.get = (url, args) => request(url, {...args, method: 'GET'});
+request.put = (url, args) => request(url, {...args, method: 'PUT'});
+request.post = (url, args) => request(url, {...args, method: 'POST'});
+request.delete = (url, args) => request(url, {...args, method: 'DELETE'});
 
-export default request
+export default request;

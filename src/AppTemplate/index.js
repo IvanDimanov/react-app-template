@@ -1,35 +1,23 @@
-import React, { Component, Children, cloneElement } from 'react'
-import { withStyles } from 'material-ui/styles'
+import React from 'react';
+import PropTypes from 'prop-types';
+import {withStyles} from '@material-ui/core/styles';
 
-import Header from './Header'
+import Header from './Header';
 
 const styles = (theme) => ({
-  main: theme.typography.body1
-})
+  main: theme.typography.body1,
+});
 
-class Layout extends Component {
-  state = {
-    avatar: {}
-  }
+const Layout = ({children, classes}) => (
+  <div className={classes.main}>
+    <Header />
+    {children}
+  </div>
+);
 
-  setAvatar = (avatar = {}) => this.setState((state) => ({
-    ...state,
-    avatar
-  }))
+Layout.propTypes = {
+  children: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  classes: PropTypes.object.isRequired,
+};
 
-  render () {
-    const { children, classes } = this.props
-    const { avatar } = this.state
-
-    const childrenWithProps = Children.map(children, (child) => cloneElement(child, {moduleProps: {setAvatar: this.setAvatar}}))
-
-    return (
-      <div className={classes.main}>
-        <Header avatar={avatar} setAvatar={this.setAvatar} />
-        {childrenWithProps}
-      </div>
-    )
-  }
-}
-
-export default withStyles(styles)(Layout)
+export default withStyles(styles)(Layout);

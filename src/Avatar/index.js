@@ -1,160 +1,33 @@
-import React, { Component } from 'react'
-import { withStyles } from 'material-ui/styles'
-import LazyLoad from 'react-lazy-load'
+import React, {useContext} from 'react';
+import PropTypes from 'prop-types';
+import {withStyles} from '@material-ui/core/styles';
 
-import request from '../utils/request'
+import Grid from '@material-ui/core/Grid';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 
-import Grid from 'material-ui/Grid'
-import TextField from 'material-ui/TextField'
-import Card, { CardActions, CardContent, CardMedia } from 'material-ui/Card'
-import Button from 'material-ui/Button'
-import Typography from 'material-ui/Typography'
+import CenteredPage from 'common/CenteredPage';
 
-import CenteredGrid from 'common/CenteredGrid'
+import {AvatarContext, AvatarContextProvider} from './AvatarContext';
 
-const styles = {
-  CenteredGrid: {
-    width: 1000
-  },
+import styles from './styles';
 
-  Card: {
-    display: 'inline-block',
-    width: 150,
-    margin: 10
-  },
+import User from './User';
+import UserRepo from './UserRepo';
 
-  CardMedia: {
-    height: 200
-  }
-}
+const Avatar = ({classes}) => {
+  const {searchName, isSearchLoading, searchUsers, userRepos, setSearchName, searchForUser} = useContext(AvatarContext);
 
-class Avatar extends Component {
-  state = {
-    searchName: '',
-    isSearchLoading: false,
-    searchUsers: [],
-    userRepos: []
-  }
+  const submitOnEnterKey = (event) => event.key === 'Enter' ? searchForUser(searchName) : null;
 
-  setSearchName = (event) => {
-    const { value } = event.target
-    this.setState((state) => ({ ...state, searchName: value }))
-  }
-
-  searchForUser = async (searchName) => {
-    this.setState((state) => ({ ...state, isSearchLoading: true }))
-
-    const {data: {items = []}} = await request(`https://api.github.com/search/users?q=${searchName}`)
-
-    this.setState((state) => ({
-      ...state,
-      searchUsers: items,
-      userRepos: [],
-      isSearchLoading: false
-    }))
-  }
-
-  loadUserRepos = async (userName) => {
-    this.setState((state) => ({ ...state, isSearchLoading: true }))
-
-    const {data: repos} = await request(`https://api.github.com/users/${userName}/repos`)
-
-    this.setState((state) => ({
-      ...state,
-      userRepos: repos || [],
-      isSearchLoading: false
-    }))
-  }
-
-  renderUser = (result, index) => {
-    const { classes, setAvatar } = this.props
-    const { isSearchLoading } = this.state
-
-    return <Card
-      key={index}
-      className={classes.Card}
-    >
-      <LazyLoad height={styles.CardMedia.height}>
-        <CardMedia
-          title={`Image of ${result.login}`}
-          image={result.avatar_url}
-          className={classes.CardMedia}
-        />
-      </LazyLoad>
-
-      <CardContent>
-        <Typography type='headline' component='h2' noWrap>{result.login}</Typography>
-
-        <Typography component='p'><b>Score:</b> {result.score}</Typography>
-      </CardContent>
-
-      <CardActions>
-        <Button
-          size='small'
-          color='primary'
-          onClick={() => this.loadUserRepos(result.login)}
-          disabled={isSearchLoading}
-        >
-          Load Repos
-        </Button>
-
-        <Button
-          size='small'
-          color='primary'
-          onClick={() => setAvatar(result)}
-        >
-          Set as Avatar
-        </Button>
-      </CardActions>
-    </Card>
-  }
-
-  renderUserRepo = (repo, index) => {
-    const { classes } = this.props
-
-    return <Card
-      key={index}
-      className={classes.Card}
-    >
-      <CardContent>
-        <Typography type='headline' component='h2' noWrap>{repo.name}</Typography>
-        <Typography component='p'><b>Language: </b> {repo.language}</Typography>
-        <br />
-        <Typography component='p'>{repo.description}</Typography>
-      </CardContent>
-
-      <CardActions>
-        <Button
-          size='small'
-          color='primary'
-          onClick={() => window.open(repo.html_url)}
-        >
-          View Online
-        </Button>
-
-        <Button
-          size='small'
-          color='primary'
-          onClick={() => window.open(repo.homepage)}
-          disabled={!repo.homepage}
-        >
-          Home page
-        </Button>
-      </CardActions>
-    </Card>
-  }
-
-  render () {
-    const { searchName, isSearchLoading, searchUsers, userRepos } = this.state
-    const { classes } = this.props
-
-    return <CenteredGrid className={classes.CenteredGrid}>
+  return (
+    <CenteredPage className={classes.CenteredPage}>
       <TextField
         type='search'
         label='Search GitHub User'
         value={searchName}
-        onChange={this.setSearchName}
-        onKeyPress={(event) => event.key === 'Enter' ? this.searchForUser(searchName) : null}
+        onChange={setSearchName}
+        onKeyPress={submitOnEnterKey}
         disabled={isSearchLoading}
         autoFocus
       />
@@ -165,15 +38,25 @@ class Avatar extends Component {
       <Grid container>
         <Grid item xs={7}>
           {searchUsers.length
-            ? searchUsers.map(this.renderUser)
+            ? searchUsers.map((result, index) => <User key={index} result={result} />)
             : <Typography component='p'>No users found</Typography>
           }
         </Grid>
 
-        <Grid item xs={5}>{userRepos.map(this.renderUserRepo)}</Grid>
+        <Grid item xs={5}>{userRepos.map((repo, index) => <UserRepo key={index} repo={repo} />)}</Grid>
       </Grid>
-    </CenteredGrid>
-  }
-}
+    </CenteredPage>
+  );
+};
 
-export default withStyles(styles)(Avatar)
+Avatar.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+const AvatarContextWrap = (props) => (
+  <AvatarContextProvider>
+    <Avatar {...props} />
+  </AvatarContextProvider>
+);
+
+export default withStyles(styles)(AvatarContextWrap);

@@ -1,29 +1,39 @@
-import React from 'react'
-import { withRouter } from 'react-router'
-import { Link } from 'react-router-dom'
+import React from 'react';
+import PropTypes from 'prop-types';
+import {withRouter} from 'react-router';
+import {Link} from 'react-router-dom';
 
-import { withStyles } from 'material-ui/styles'
-import Button from 'material-ui/Button'
+import {withStyles} from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 
 const styles = () => ({
   Link: {
-    textDecoration: 'none'
+    textDecoration: 'none',
   },
 
   ButtonSelected: {
-    color: 'white'
+    color: 'white',
   },
 
   ButtonNotSelected: {
-    color: 'grey'
-  }
-})
+    color: 'grey',
+  },
+});
 
-const LinkButton = ({ classes, location, path, label }) => <Link
-  className={classes.Link}
-  to={path}
->
-  <Button className={location.pathname === path ? classes.ButtonSelected : classes.ButtonNotSelected}>{label}</Button>
-</Link>
+const LinkButton = ({classes, location, path, label}) => (
+  <Link
+    className={classes.Link}
+    to={path}
+  >
+    <Button className={location.pathname === path ? classes.ButtonSelected : classes.ButtonNotSelected}>{label}</Button>
+  </Link>
+);
 
-export default withStyles(styles)(withRouter(LinkButton))
+LinkButton.propTypes = {
+  classes: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired,
+  path: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+};
+
+export default withStyles(styles)(withRouter(LinkButton));
