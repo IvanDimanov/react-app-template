@@ -1,9 +1,7 @@
-/* global sessionStorage */
-
 import axios from 'axios';
 
 /* Helps when User reload the page or come from a Login page */
-let authorizationHeader = sessionStorage.getItem('authorizationHeader') || '';
+let authorizationHeader = global.sessionStorage ? global.sessionStorage.getItem('authorizationHeader') : '';
 
 const request = async (args) => {
   if (typeof args === 'string') {
@@ -30,7 +28,10 @@ const request = async (args) => {
   const newAuthorizationHeader = response.headers.authorization || response.headers.Authorization;
   if (newAuthorizationHeader) {
     authorizationHeader = newAuthorizationHeader;
-    sessionStorage.setItem('authorizationHeader', authorizationHeader);
+
+    if (global.sessionStorage) {
+      global.sessionStorage.setItem('authorizationHeader', authorizationHeader);
+    }
   }
 
   return response;
@@ -38,9 +39,9 @@ const request = async (args) => {
 
 /* Short-hands */
 request.getAuthorizationHeader = () => authorizationHeader;
-request.get = (url, args) => request(url, {...args, method: 'GET'});
-request.put = (url, args) => request(url, {...args, method: 'PUT'});
-request.post = (url, args) => request(url, {...args, method: 'POST'});
-request.delete = (url, args) => request(url, {...args, method: 'DELETE'});
+request.get = (url, args) => request({...args, url, method: 'GET'});
+request.put = (url, args) => request({...args, url, method: 'PUT'});
+request.post = (url, args) => request({...args, url, method: 'POST'});
+request.delete = (url, args) => request({...args, url, method: 'DELETE'});
 
 export default request;
